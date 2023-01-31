@@ -39,7 +39,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - ro.nfs_server
+         - nfs_server
 
 or
   
@@ -47,7 +47,7 @@ or
        tasks:
          - name: import_role
            import_role:
-             name: ro.nfs_server
+             name: nfs_server
            vars: 
              nfs_group: nfsusers
              nfs_server_exports:
