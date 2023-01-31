@@ -1,0 +1,53 @@
+---
+# tasks file for nfs_server
+- name: make sure needed packages are installed
+  include_tasks: "{{ ansible_os_family }}_install_pkgs.yml"
+ 
+- name: make sure needed services are enabled started
+  include_tasks: "{{ ansible_os_family }}_start_svc.yml"
+
+- name: make sure firewall is setup for nfs traffic
+  include_tasks: "{{ ansible_os_family }}_firewall.yml"
+
+- name: push nfs exports config file
+  template:
+    src: ./templates/exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0600'
+    setype: _default
+  vars:
+    notify_line: "restart nfs {{ ansible_os_family }}-{{ ansible_distribution_major_version }}"
+  notify:
+    "{{ notify_line }}"
+
+- name: make sure nfs group is created
+  group:
+    name: "{{ nfs_group }}"
+    state: present
+
+- name: make sure export directories are created
+  file:
+    path: "{{ item['directory_name'] }}"
+    group: "{{ nfs_group }}"
+    setype: public_content_t
+    state: directory
+  loop: 
+    "{{ nfs_server_share_dirs }}"
+
+- name: set proper rights on private directory
+  file:
+    path: "{{ private_directory }}"
+    mode: "2770"
+    state: directory
+
+- name: set proper rights on public directory
+  file:
+    path: "{{ public_directory }}"
+    mode: "2550"
+    state: directory
+
+
+- name: make sure needed services are enabled/started
+  include_tasks: "./tasks/{{ ansible_os_family }}_start_svc.yml"
