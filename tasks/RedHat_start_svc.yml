@@ -6,7 +6,9 @@
     state: started
   loop:
     - nfs-server
-  when: ansible_distribution_major_version == "8"
+  when:
+    - ansible_distribution_major_version == "9"
+    - ansible_distribution_major_version == "8"
 
 - name: make sure nfs server is enabled/started RHEL7 - yum
   service:
