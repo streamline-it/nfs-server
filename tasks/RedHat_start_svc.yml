@@ -1,5 +1,5 @@
 ---
-- name: make sure nfs server is enabled/started RHEL8-systemd
+- name: make sure nfs server is enabled/started via systemd
   systemd:
     name: "{{ item }}"
     enabled: true
