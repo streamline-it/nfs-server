@@ -6,9 +6,6 @@
 - name: make sure needed services are enabled started
   include_tasks: "{{ ansible_os_family }}_start_svc.yml"
 
-- name: make sure firewall is setup for nfs traffic
-  include_tasks: "{{ ansible_os_family }}_firewall.yml"
-
 - name: push nfs exports config file
   template:
     src: ./templates/exports.j2
