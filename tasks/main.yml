@@ -9,6 +9,14 @@
 - name: make sure firewall is setup for nfs traffic
   include_tasks: "{{ ansible_os_family }}_firewall.yml"
 
+- name: ensure standard ports are defaulted for nfs programs
+  ansible.builtin.template:
+    src: nfs.conf.j2
+    dest: /etc/nfs.conf
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: push nfs exports config file
   template:
     src: ./templates/exports.j2

@@ -14,3 +14,8 @@ nfs_server_exports:
     export_path: "{{ public_directory }}"
   - export_line: "{{ private_directory }} localhost(rw,sec=sys,no_root_squash)"
     export_path: "{{ private_directory }}"
+
+# Control the ports nfs uses server-side
+nfs_server_lockd_port: 4045
+nfs_server_mountd_port: 892
+nfs_server_statd_port: 1110
