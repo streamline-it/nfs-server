@@ -45,16 +45,12 @@
     setype: public_content_t
     state: directory
 
-- name: set proper rights on private directory
+- name: set proper rights on export directory(s)
+  loop:
+    "{{ nfs_server_share_dirs }}"
   ansible.builtin.file:
-    path: "{{ private_directory }}"
+    path: "{{ item['directory_name'] }}"
     mode: "2770"
-    state: directory
-
-- name: set proper rights on public directory
-  ansible.builtin.file:
-    path: "{{ public_directory }}"
-    mode: "2550"
     state: directory
 
 - name: make sure needed services are enabled/started

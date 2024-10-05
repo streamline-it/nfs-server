@@ -1,18 +1,19 @@
 ---
 - name: make sure nfs server is enabled/started RHEL8-systemd
+  loop:
+    - nfs-server
+  when: ansible_distribution_major_version == "8" or ansible_distribution_major_version == '9'
   systemd:
     name: "{{ item }}"
     enabled: true
     state: started
-  loop:
-    - nfs-server
-  when: ansible_distribution_major_version == "8"
 
 - name: make sure nfs server is enabled/started RHEL7 - yum
+  loop:
+    - nfs-server
+  when: ansible_distribution_major_version == "7"
   service:
     name: "{{ item }}" 
     enabled: true
     state: started
-  loop:
-    - nfs-server
-  when: ansible_distribution_major_version == "7"
+
