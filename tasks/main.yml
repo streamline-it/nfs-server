@@ -6,9 +6,6 @@
 - name: make sure needed services are enabled started
   include_tasks: "{{ ansible_os_family }}_start_svc.yml"
 
-- name: make sure firewall is setup for nfs traffic
-  include_tasks: "{{ ansible_os_family }}_firewall.yml"
-
 - name: ensure standard ports are defaulted for nfs programs
   vars:
     notify_line: "restart nfs {{ ansible_os_family }}-{{ ansible_distribution_major_version }}"
