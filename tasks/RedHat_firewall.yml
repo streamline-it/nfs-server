@@ -1,7 +1,0 @@
----
-- name: open up ports for nfs RedHat-firewalld
-  firewalld:
-    service: nfs
-    immediate: true
-    permanent: true
-    state: enabled
