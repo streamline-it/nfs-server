@@ -27,6 +27,16 @@ nfs_server_exports:
   - export_line: "{{ public_directory }}" localhost(ro,sec=sys,no_root_squash)
   - export_line: "{{ private_directory }}" localhost(rw,sec=sys,no_root_squash)
 
+
+# port for lockd
+port={{ nfs_server_lockd_port }}
+
+# port for mountd
+port={{ nfs_server_mountd_port }}
+
+# port for statd
+port={{ nfs_server_statd_port }}
+
 Dependencies
 ------------
 
@@ -66,4 +76,5 @@ BSD
 
 Author Information
 ------------------
+
 

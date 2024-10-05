@@ -1,21 +1,16 @@
 ---
 # handlers file for nfs_server
-- name: restart nfs RedHat-9
-  ansible.builtin.systemd: 
-    name: nfs-server
-    state: restarted
-
 - name: restart nfs RedHat-8
-  ansible.builtin.systemd: 
+  systemd: 
     name: nfs-server
     state: restarted
 
 - name: restart nfs RedHat-7
-  ansible.builtin.systemd: 
+  systemd: 
     name: nfs-server
     state: restarted
 
 - name: restart nfs RedHat-6
-  ansible.builtin.service:
+  service:
     name: nfs-server
     state: restarted
