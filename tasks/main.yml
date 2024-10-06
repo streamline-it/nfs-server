@@ -42,6 +42,7 @@
   ansible.builtin.file:
     path: "{{ item['directory_name'] }}"
     group: "{{ nfs_group }}"
+    mode: "2770"
     setype: public_content_t
     state: directory
 
