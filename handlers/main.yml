@@ -1,5 +1,10 @@
 ---
 # handlers file for nfs_server
+- name: restart nfs RedHat-9
+  systemd: 
+    name: nfs-server
+    state: restarted
+
 - name: restart nfs RedHat-8
   systemd: 
     name: nfs-server
