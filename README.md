@@ -10,32 +10,54 @@ None
 Role Variables
 --------------
 
-
-Controls creation of directories
-
+# defaults file for nfs-server
 nfs_group: nfsusers
 
 public_directory: /exp/nfs/pub
 private_directory: /exp/nfs/priv
 
-nfs_server_share_dirs:           
-  - directory_name: "{{ public_directory }}" 
+nfs_server_share_dirs:
+  - directory_name: "{{ public_directory }}"
   - directory_name: "{{ private_directory }}"
 
-
+# following defaulted for RHEL hosts, FreeBSD will be slightly different
 nfs_server_exports:
-  - export_line: "{{ public_directory }}" localhost(ro,sec=sys,no_root_squash)
-  - export_line: "{{ private_directory }}" localhost(rw,sec=sys,no_root_squash)
+  - export_line: "{{ public_directory }} localhost(ro,sec=sys,no_root_squash)"
+    export_path: "{{ public_directory }}"
+  - export_line: "{{ private_directory }} localhost(rw,sec=sys,no_root_squash)"
+    export_path: "{{ private_directory }}"
+
+# Control the ports nfs uses server-side
+nfs_server_lockd_port: 4045
+nfs_server_mountd_port: 892
+nfs_server_statd_port: 1110
+
+# FreeBSD specific rc.conf variables
+
+nfs_server_rc_vars:
+  - line: 'nfs_server_enable="YES"'
+  - line: 'rpc_bind_enable="YES"'
+  - line: 'mountd_enable="YES"'
+  - line: 'rpc_lockd_enable="YES"'
+  - line: 'rpc_statd_enable="YES"'
 
 
-# port for lockd
-port={{ nfs_server_lockd_port }}
+#
+#
+# contents of vars/RedHat.yml
+#
 
-# port for mountd
-port={{ nfs_server_mountd_port }}
+nfs_svc: nfs-server
 
-# port for statd
-port={{ nfs_server_statd_port }}
+#
+#
+# contents of vars/FreeBSD.yml
+#
+
+
+nfs_svc: nfs_server
+
+
 
 Dependencies
 ------------
@@ -76,5 +98,4 @@ BSD
 
 Author Information
 ------------------
-
 

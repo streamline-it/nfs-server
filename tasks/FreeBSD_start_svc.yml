@@ -1,0 +1,27 @@
+---
+- name: make sure nfs server and related services are enabled FreeBSD host
+  loop:
+    "{{ nfs_server_rc_vars }}"
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    line: "{{ line }}"
+    state: present
+
+- name: ensure nfs ports are standardized
+  notify: restart nfs FreeBSD
+  loop:
+    - 'mountd_flags="-r -p {{ nfs_server_mount_port }}"'
+    - 'rpc_lockd_flags="-p {{ nfs_server_lockd_port }}"'
+    - 'rpc_statd_flags="-p {{ nfs_server_statd_port }}"'
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    line: "{{ item }}"
+    state: present
+
+- name: make sure nfs server is started RHEL host
+  loop:
+    - "{{ nfs_svc }}"
+  service:
+    name: "{{ item }}" 
+    enabled: true
+    state: started

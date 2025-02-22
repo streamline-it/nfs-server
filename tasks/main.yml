@@ -1,12 +1,17 @@
 ---
 # tasks file for nfs_server
-- name: make sure needed packages are installed
+- name: inlude OS related variables
+  ansible.builtin.include_vars: "./vars/{{ ansible_os_family }}.yml"
+
+- name: call tasks to make sure needed packages are installed
+  when: ansible_os_family == "RedHat"
   include_tasks: "{{ ansible_os_family }}_install_pkgs.yml"
  
-- name: make sure needed services are enabled started
+- name: call tasks to make sure needed services are enabled started
   include_tasks: "{{ ansible_os_family }}_start_svc.yml"
 
-- name: ensure standard ports are defaulted for nfs programs
+- name: ensure standard ports are defaulted for nfs program for RHEL systems
+  when: ansible_os_family == "RedHat"
   vars:
     notify_line: "restart nfs {{ ansible_os_family }}-{{ ansible_distribution_major_version }}"
   notify:
@@ -18,41 +23,16 @@
     group: root
     mode: '0644'
 
-- name: push nfs exports config file
-  vars:
-    notify_line: "restart nfs {{ ansible_os_family }}-{{ ansible_distribution_major_version }}"
-  notify:
-    "{{ notify_line }}"
-  ansible.builtin.template:
-    src: ./templates/exports.j2
-    dest: /etc/exports
-    owner: root
-    group: root
-    mode: '0600'
-    setype: _default
+- name: call tasks to make sure nfs exports config file is pushed
+  ansible.builtin.include_tasks: ./tasks/push_exports_config.yml
 
 - name: make sure nfs group is created
   ansible.builtin.group:
     name: "{{ nfs_group }}"
     state: present
 
-- name: make sure export directories are created
-  loop: 
-    "{{ nfs_server_share_dirs }}"
-  ansible.builtin.file:
-    path: "{{ item['directory_name'] }}"
-    group: "{{ nfs_group }}"
-    mode: "2770"
-    setype: public_content_t
-    state: directory
+- name: call tasks to make sure directories are created
+  ansible.builtin.include_tasks: "./tasks/create_directories.yml"
 
-- name: set proper rights on export directory(s)
-  loop:
-    "{{ nfs_server_share_dirs }}"
-  ansible.builtin.file:
-    path: "{{ item['directory_name'] }}"
-    mode: "2770"
-    state: directory
-
-- name: make sure needed services are enabled/started
+- name: call tasks to make sure needed services are enabled/started
   ansible.builtin.include_tasks: "./tasks/{{ ansible_os_family }}_start_svc.yml"

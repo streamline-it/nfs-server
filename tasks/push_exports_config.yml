@@ -1,0 +1,25 @@
+- name: push nfs exports config file (RedHat hosts)
+  when: ansible_os_family == "RedHat"
+  vars:
+    notify_line: "restart nfs {{ ansible_os_family }}-{{ ansible_distribution_major_version }}"
+  notify:
+    "{{ notify_line }}"
+  ansible.builtin.template:
+    src: ./templates/exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: push nfs exports config file (FreeBSD hosts)
+  when: ansible_os_family == "FreeBSD"
+  vars:
+    notify_line: "restart nfs {{ ansible_os_family }}"
+  notify:
+    "{{ notify_line }}"
+  ansible.builtin.template:
+    src: ./templates/exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0600'

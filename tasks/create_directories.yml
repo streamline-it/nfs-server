@@ -1,0 +1,29 @@
+---
+- name: make sure export directories are created RHEL hosts
+  when: ansible_os_family == "RedHat"
+  loop:
+    "{{ nfs_server_share_dirs }}"
+  ansible.builtin.file:
+    path: "{{ item['directory_name'] }}"
+    group: "{{ nfs_group }}"
+    mode: "2770"
+    setype: public_content_t
+    state: directory
+
+- name: make sure export directories are created FreeBSD hosts
+  when: ansible_os_family == "FreeBSD"
+  loop:
+    "{{ nfs_server_share_dirs }}"
+  ansible.builtin.file:
+    path: "{{ item['directory_name'] }}"
+    group: "{{ nfs_group }}"
+    mode: "2770"
+    state: directory
+
+- name: set proper rights on export directory(s)
+  loop:
+    "{{ nfs_server_share_dirs }}"
+  ansible.builtin.file:
+    path: "{{ item['directory_name'] }}"
+    mode: "2770"
+    state: directory
