@@ -21,6 +21,11 @@
     state: restarted
 
 - name: restart nfs FreeBSD
+  loop:
+    - "{{ nfs_svc }}"
+    - "{{ nfs_mountd_svc }}"
+    - "{{ nfs_lockd_svc }}"
+    - "{{ nfs_statd_svc }}"
   service:
     name: "{{ nfs_svc }}"
     state: restarted
