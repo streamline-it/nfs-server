@@ -2,24 +2,25 @@
 # handlers file for nfs_server
 - name: restart nfs RedHat-9
   systemd: 
-    name: "{{ nfs-svc }}"
+    name: "{{ nfs_svc }}"
     state: restarted
 
 - name: restart nfs RedHat-8
   systemd: 
-    name: "{{ nfs-svc }}"
+    name: "{{ nfs_svc }}"
     state: restarted
 
 - name: restart nfs RedHat-7
   systemd: 
-    name: "{{ nfs-svc }}"
+    name: "{{ nfs_svc }}"
     state: restarted
 
 - name: restart nfs RedHat-6
   service:
-    name: "{{ nfs-svc }}"
+    name: "{{ nfs_svc }}"
     state: restarted
 
 - name: restart nfs FreeBSD
   service:
-    name: "{{ nfs-svc }}"
+    name: "{{ nfs_svc }}"
+    state: restarted
