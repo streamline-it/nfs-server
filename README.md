@@ -56,7 +56,8 @@ nfs_svc: nfs-server
 
 
 nfs_svc: nfs_server
-
+nfs_lockd_svc: lockd
+nfs_statd_svc: statd
 
 
 Dependencies

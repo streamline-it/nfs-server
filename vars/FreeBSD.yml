@@ -1,2 +1,5 @@
 ---
-nfs_svc: nfs_server
+nfs_svc_enable: nfs_server
+nfs_svc: nfsd
+nfs_lockd_svc: lockd
+nfs_statd_svc: statd
