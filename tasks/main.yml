@@ -7,9 +7,6 @@
   when: ansible_os_family == "RedHat"
   include_tasks: "{{ ansible_os_family }}_install_pkgs.yml"
  
-- name: call tasks to make sure needed services are enabled started
-  include_tasks: "{{ ansible_os_family }}_start_svc.yml"
-
 - name: ensure standard ports are defaulted for nfs program for RHEL systems
   when: ansible_os_family == "RedHat"
   vars:
@@ -25,6 +22,9 @@
 
 - name: call tasks to make sure nfs exports config file is pushed
   ansible.builtin.include_tasks: ./tasks/push_exports_config.yml
+
+- name: call tasks to make sure needed services are enabled started
+  include_tasks: "{{ ansible_os_family }}_start_svc.yml"
 
 - name: make sure nfs group is created
   ansible.builtin.group:
