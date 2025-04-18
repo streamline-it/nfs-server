@@ -16,4 +16,3 @@
     name: "{{ item }}" 
     enabled: true
     state: started
-

@@ -1,4 +1,13 @@
 ---
+- name: ensure key variables have been defined to enable and configure nfs service
+  ansible.builtin.assert:
+    that: 
+      - nfs_server_rc_vars is defined
+      - nfs_server_mountd_port is defined
+      - nfs_server_lockd_port is defined
+      - nfs_server_statd_port is defined
+    fail_msg: "make sure following vars are defined (nfs_server_rc_vars, nfs_server_mountd_port, nfs_server_lockd_port, nfs_server_statd_port)"
+
 - name: make sure nfs server and related services are enabled FreeBSD host
   loop:
     "{{ nfs_server_rc_vars }}"
@@ -17,6 +26,14 @@
     path: /etc/rc.conf
     line: "{{ item }}"
     state: present
+
+- name: ensure nfs related service variables are defined before starting the service
+  ansible.builtin.assert:
+    that:
+      - nfs_svc is defined
+      - nfs_lockd_svc is defined
+      - nfs_statd_svc is defined
+    fail_msg: "Make sure following variables have been defined (nfs_svc, nfs_lockd_svc, nfs_statd_svc)"
 
 - name: make sure nfs server and related services are started FreeBSD host
   loop:
