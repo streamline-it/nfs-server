@@ -44,9 +44,3 @@
     name: "{{ item }}" 
     enabled: true
     state: started
-
-- name: ensure mountd is restarted to pick up any changes to /etc/exports
-  ansible.builtin.service:
-    name: "{{ nfs_mouintd_svc }}" 
-    enabled: true
-    state: restarted

@@ -1,0 +1,5 @@
+---
+- name: ensure the mountd service is restarted to pick up changes in /etc/exports
+  ansible.builtin.service:
+    name: "{{ nfs_mountd_svc }}"
+    state: restarted

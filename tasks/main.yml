@@ -36,3 +36,6 @@
 
 - name: call tasks to make sure needed services are enabled/started
   ansible.builtin.include_tasks: "./tasks/{{ ansible_os_family }}_start_svc.yml"
+
+- name: call task to restart mountd service
+  ansible.builtin.include_tasks: "{{ ansible_os_family }}_restart_mountd.yml"
