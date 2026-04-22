@@ -3,6 +3,9 @@
 - name: inlude OS related variables
   ansible.builtin.include_vars: "./vars/{{ ansible_os_family }}.yml"
 
+- name: call tasks to check assertions
+  ansible.builtin.include_tasks: asserts.yml
+
 - name: call tasks to make sure needed packages are installed
   when: ansible_os_family == "RedHat"
   include_tasks: "{{ ansible_os_family }}_install_pkgs.yml"

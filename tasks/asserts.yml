@@ -1,0 +1,23 @@
+---
+- name: check variables for values and make sure they're defined
+  ansible.builtin.assert:
+    that:
+      - nfs_group is defined
+      - nfs_group is truthy
+      - public_directory is defined
+      - public_directory is truthy
+      - private_directory is defined
+      - private_directory is truthy
+      - nfs_server_share_dirs is defined
+      - nfs_server_share_dirs is truthy
+      - nfs_server_exports is defined
+      - nfs_server_exports is truthy
+      - nfs_server_lockd_port is defined
+      - nfs_server_lockd_port is truthy
+      - nfs_server_mountd_port is defined
+      - nfs_server_mountd_port is truthy
+      - nfs_server_statd_port is defined
+      - nfs_server_statd_port is truthy 
+      - nfs_server_rc_vars is defined
+      - nfs_server_rc_vars is truthy
+    fail_msg: "Make sure key variables are defined and set"
