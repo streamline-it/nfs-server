@@ -68,28 +68,65 @@ None.
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+RHEL example
 
-    - hosts: servers
-      roles:
-         - nfs_server
+- name: setup nfs server
+  hosts: node5.rocky93.example.com
+  become: true
 
-or
-  
-     - hosts: servers
-       tasks:
-         - name: import_role
-           import_role:
-             name: nfs_server
-           vars: 
-             nfs_group: nfsusers
-             nfs_server_exports:
-               - export_line: /exp/nfs/pub node[2-3].example.com(ro,sec=sys,no_root_squash)
-               - export_line: /exp/nfs/priv node[2-3](rw,sec=sys,no_root_squash)
+  vars:
 
-             nfs_server_share_dirs:           
-               - directory_name: /exp/nfs/pub 
-               - directory_name: /exp/nfs/priv
+    nfs_group: nfsusers
+
+    public_directory: /exp/nfs/pub
+    private_directory: /exp/nfs/priv
+
+    nfs_server_share_dirs:
+      - directory_name: "{{ public_directory }}"
+      - directory_name: "{{ private_directory }}"
+
+    # following defaulted for RHEL hosts, FreeBSD will be slightly different
+    nfs_server_exports:
+      - export_line: "{{ private_directory }} 172.16.20.86(rw,sec=sys,no_root_squash)"
+        export_path: "{{ private_directory }}"
+      - export_line: "{{ public_directory }} 172.16.20.86(ro,sec=sys,no_root_squash)"
+        export_path: "{{ public_directory }}"
+
+
+  roles:
+
+    - name: nfs-server
+
+FreeBSD example
+
+- name: setup nfs server
+  hosts: node8.freebsd13.example.com
+  become: true
+
+  vars:
+
+    nfs_group: nfsusers
+
+    public_directory: /exp/nfs/pub
+    private_directory: /exp/nfs/priv
+
+    nfs_server_share_dirs:
+      - directory_name: "{{ public_directory }}"
+      - directory_name: "{{ private_directory }}"
+
+    # following defaulted for RHEL hosts, FreeBSD will be slightly different
+    nfs_server_exports:
+      - export_line: "{{ private_directory }} sec=sys -maproot=root 172.16.20.86"
+        export_path: "{{ private_directory }}"
+
+    # Control the ports nfs uses server-side
+    nfs_server_lockd_port: 4045
+    nfs_server_mountd_port: 892
+    nfs_server_statd_port: 1110
+
+  roles:
+
+    - name: nfs-server
 
 
 License
